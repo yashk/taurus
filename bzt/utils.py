@@ -21,6 +21,7 @@ import fnmatch
 import itertools
 import json
 import logging
+import math
 import mimetypes
 import os
 import platform
@@ -38,7 +39,6 @@ import webbrowser
 import zipfile
 from abc import abstractmethod
 from collections import defaultdict, Counter
-from math import log
 from subprocess import CalledProcessError
 from subprocess import PIPE
 from webbrowser import GenericBrowser
@@ -484,6 +484,15 @@ class ComplexEncoder(json.JSONEncoder):
         :param obj:
         :return:
         """
+
+        # TODO: http://stackoverflow.com/questions/17503981/is-there-a-way-to-override-pythons-json-handler
+        if isinstance(obj, float):
+            if math.isnan(obj):
+                return "NaN"
+            elif math.isinf(obj) and obj > 0:
+                return "Infinity"
+            elif math.isinf(obj) and obj < 0:
+                return "-Infinity"
 
         if self.__dumpable(obj):
             res = {}
@@ -1045,7 +1054,7 @@ def humanize_bytes(byteval):
 
     # determine binary order in steps of size 10
     # (coerce to int, // still returns a float)
-    order = int(log(byteval, 2) / 10) if byteval else 0
+    order = int(math.log(byteval, 2) / 10) if byteval else 0
     # format file size
     # (.4g results in rounded numbers for exact matches and max 3 decimals,
     # should never resort to exponent values)
