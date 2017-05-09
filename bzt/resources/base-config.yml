@@ -52,6 +52,8 @@ modules:
     class: bzt.modules.aggregator.ConsolidatingAggregator
   final-stats:
     class: bzt.modules.reporting.FinalStatus
+  custom-status :
+   class : bzt.modules.reporting.CustomStatus  
   functional-consolidator:
     class: bzt.modules.functional.FunctionalAggregator
   android-emulator:
@@ -76,6 +78,8 @@ modules:
 ---
 # experimental & deprecated
 modules:
+  custom-status :
+   class : bzt.modules.reporting.CustomStatus
   final_stats:
     class: bzt.modules.reporting.FinalStatus
   chrome-metric-reporter:
